@@ -1,0 +1,310 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.10.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Parameters": {
+    "CloudWatchRule": {
+      "Type": "String",
+      "Default": "NONE",
+      "Description": " Schedule Expression"
+    },
+    "deploymentBucketName": {
+      "Type": "String"
+    },
+    "env": {
+      "Type": "String"
+    },
+    "s3Key": {
+      "Type": "String"
+    },
+    "vectordbopensearchCollectionEndpoint": {
+      "Type": "String",
+      "Description": "Input parameter describing CollectionEndpoint attribute for vectordb/opensearch resource"
+    },
+    "vectordbopensearchopensearchServerlessCollectionARN": {
+      "Type": "String",
+      "Description": "Input parameter describing ARN of opensearchServerlessCollection for vectordb/opensearch resource"
+    },
+    "vectordbopensearchopensearchServerlessCollectionName": {
+      "Type": "String",
+      "Description": "Input parameter describing opensearchServerlessCollectionName attribute for vectordb/opensearch resource"
+    },
+    "vectordbopensearchopensearchServerlessIndexName": {
+      "Type": "String",
+      "Description": "Input parameter describing opensearchServerlessIndexName attribute for vectordb/opensearch resource"
+    },
+    "functionfrontendClipCrunchersSharedArn": {
+      "Type": "String",
+      "Default": "functionfrontendClipCrunchersSharedArn"
+    },
+    "customkinesisvideostreamkinesisVideoStreamName": {
+      "Type": "String",
+      "Default": "clip-crunchers-video-stream"
+    },
+    "bedrockModelId": {
+      "Type": "String",
+      "Default": "amazon.titan-embed-image-v1"
+    },
+    "kinesisVideoStreamIntegration": {
+      "Type": "String",
+      "Default": "False",
+      "AllowedValues": [
+        "True",
+        "False"
+      ]
+    }
+  },
+  "Conditions": {
+    "ShouldNotCreateEnvResources": {
+      "Fn::Equals": [
+        {
+          "Ref": "env"
+        },
+        "NONE"
+      ]
+    }
+  },
+  "Resources": {
+    "LambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Metadata": {
+        "aws:asset:path": "./src",
+        "aws:asset:property": "Code"
+      },
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": {
+            "Ref": "s3Key"
+          }
+        },
+        "Handler": "index.handler",
+        "FunctionName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "frontendf6b68d3c",
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "frontendf6b68d3c",
+                  "-",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "Environment": {
+          "Variables": {
+            "ENV": {
+              "Ref": "env"
+            },
+            "REGION": {
+              "Ref": "AWS::Region"
+            },
+            "OpensearchEndpoint": {
+              "Ref": "vectordbopensearchCollectionEndpoint"
+            },
+            "OpensearchIndexName": {
+              "Ref": "vectordbopensearchopensearchServerlessIndexName"
+            },
+            "KinesisVideoStreamName": {
+              "Ref": "customkinesisvideostreamkinesisVideoStreamName"
+            },
+            "BedrockModelId": {
+              "Ref": "bedrockModelId"
+            },
+            "KinesisVideoStreamIntegration": {
+              "Ref": "kinesisVideoStreamIntegration"
+            }
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "LambdaExecutionRole",
+            "Arn"
+          ]
+        },
+        "Runtime": "python3.11",
+        "Layers": [
+          {
+            "Ref": "functionfrontendClipCrunchersSharedArn"
+          },
+          "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python311:4"
+        ],
+        "Timeout": 25
+      }
+    },
+    "LambdaExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::If": [
+            "ShouldNotCreateEnvResources",
+            "frontendLambdaRole8951cf29",
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "frontendLambdaRole8951cf29",
+                  "-",
+                  {
+                    "Ref": "env"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "lambdaexecutionpolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": {
+                "Fn::Sub": [
+                  "arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
+                  {
+                    "region": {
+                      "Ref": "AWS::Region"
+                    },
+                    "account": {
+                      "Ref": "AWS::AccountId"
+                    },
+                    "lambda": {
+                      "Ref": "LambdaFunction"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "CustomLambdaExecutionPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "custom-lambda-execution-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": [
+                "bedrock:InvokeModel"
+              ],
+              "Resource": [
+                {
+                  "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockModelId}"
+                }
+              ],
+              "Effect": "Allow"
+            },
+            {
+              "Action": [
+                "aoss:APIAccessAll"
+              ],
+              "Resource": [
+                {
+                  "Ref": "vectordbopensearchopensearchServerlessCollectionARN"
+                }
+              ],
+              "Effect": "Allow"
+            },
+            {
+              "Action": [
+                "kinesisvideo:Describe*",
+                "kinesisvideo:Get*",
+                "kinesisvideo:List*"
+              ],
+              "Resource": [
+                {
+                  "Fn::Sub": "arn:${AWS::Partition}:kinesisvideo:${AWS::Region}:${AWS::AccountId}:${customkinesisvideostreamkinesisVideoStreamName}"
+                }
+              ],
+              "Effect": "Allow"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ]
+      },
+      "DependsOn": "LambdaExecutionRole"
+    }
+  },
+  "Outputs": {
+    "Name": {
+      "Value": {
+        "Ref": "LambdaFunction"
+      }
+    },
+    "Arn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "LambdaFunction",
+          "Arn"
+        ]
+      }
+    },
+    "Region": {
+      "Value": {
+        "Ref": "AWS::Region"
+      }
+    },
+    "LambdaExecutionRole": {
+      "Value": {
+        "Ref": "LambdaExecutionRole"
+      }
+    },
+    "LambdaExecutionRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "LambdaExecutionRole",
+          "Arn"
+        ]
+      }
+    }
+  }
+}

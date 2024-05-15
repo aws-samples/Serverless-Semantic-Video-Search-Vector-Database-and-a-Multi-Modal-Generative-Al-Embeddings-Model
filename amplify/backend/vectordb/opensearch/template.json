@@ -1,0 +1,175 @@
+{
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.10.3\",\"stackType\":\"vectordb\",\"metadata\":{}}",
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "env": {
+      "Type": "String"
+    },
+    "opensearchServerlessCollectionName": {
+      "Type": "String",
+      "Default": "clip-crunchers"
+    },
+    "opensearchServerlessIndexName": {
+      "Type": "String",
+      "Default": "clip-crunchers"
+    },
+    "opensearchServerlessStandbyReplicas": {
+      "Type": "String",
+      "Default": "ENABLED"
+    }
+  },
+  "Resources": {
+    "NetworkPolicy": {
+      "Type": "AWS::OpenSearchServerless::SecurityPolicy",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": [
+            "${collection_name}-${env}-network",
+            {
+              "collection_name": {
+                "Ref": "opensearchServerlessCollectionName"
+              },
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        },
+        "Type": "network",
+        "Description": {
+          "Fn::Sub": [
+            "Network policy for ${collection_name}-${env} collection",
+            {
+              "collection_name": {
+                "Ref": "opensearchServerlessCollectionName"
+              },
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        },
+        "Policy": {
+          "Fn::Sub": [
+            "[{\"Rules\":[{\"ResourceType\":\"collection\",\"Resource\":[\"collection/${collection_name}-${env}\"]}, {\"ResourceType\":\"dashboard\",\"Resource\":[\"collection/${collection_name}-${env}\"]}],\"AllowFromPublic\":true}]",
+            {
+              "collection_name": {
+                "Ref": "opensearchServerlessCollectionName"
+              },
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "EncryptionPolicy": {
+      "Type": "AWS::OpenSearchServerless::SecurityPolicy",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": [
+            "${collection_name}-${env}-security",
+            {
+              "collection_name": {
+                "Ref": "opensearchServerlessCollectionName"
+              },
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        },
+        "Type": "encryption",
+        "Description": {
+          "Fn::Sub": [
+            "Encryption policy for ${collection_name}-${env} collection",
+            {
+              "collection_name": {
+                "Ref": "opensearchServerlessCollectionName"
+              },
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        },
+        "Policy": {
+          "Fn::Sub": [
+            "{\"Rules\":[{\"ResourceType\":\"collection\",\"Resource\":[\"collection/${collection_name}-${env}\"]}],\"AWSOwnedKey\":true}",
+            {
+              "collection_name": {
+                "Ref": "opensearchServerlessCollectionName"
+              },
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Collection": {
+      "Type": "AWS::OpenSearchServerless::Collection",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": [
+            "${collection_name}-${env}",
+            {
+              "collection_name": {
+                "Ref": "opensearchServerlessCollectionName"
+              },
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        },
+        "Type": "VECTORSEARCH",
+        "StandbyReplicas": {
+          "Ref": "opensearchServerlessStandbyReplicas"
+        },
+        "Description": "Collection for clip crunchers demo"
+      },
+      "DependsOn": "EncryptionPolicy"
+    }
+  },
+  "Outputs": {
+    "CollectionEndpoint": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Collection",
+          "CollectionEndpoint"
+        ]
+      }
+    },
+    "opensearchServerlessCollectionARN": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Collection",
+          "Arn"
+        ]
+      }
+    },
+    "opensearchServerlessCollectionName": {
+      "Value": {
+        "Fn::Sub": [
+          "${collection_name}-${env}",
+          {
+            "collection_name": {
+              "Ref": "opensearchServerlessCollectionName"
+            },
+            "env": {
+              "Ref": "env"
+            }
+          }
+        ]
+      }
+    },
+    "opensearchServerlessIndexName": {
+      "Value": {
+        "Ref": "opensearchServerlessIndexName"
+      }
+    }
+  }
+}

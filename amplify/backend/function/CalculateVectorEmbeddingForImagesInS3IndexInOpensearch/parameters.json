@@ -1,0 +1,20 @@
+{
+  "vectordbopensearchCollectionEndpoint": {
+    "Fn::GetAtt": [
+      "vectordbopensearch",
+      "Outputs.CollectionEndpoint"
+    ]
+  },
+  "vectordbopensearchopensearchServerlessCollectionName": {
+    "Fn::GetAtt": [
+      "vectordbopensearch",
+      "Outputs.opensearchServerlessCollectionName"
+    ]
+  },
+  "vectordbopensearchopensearchServerlessIndexName": {
+    "Fn::GetAtt": [
+      "vectordbopensearch",
+      "Outputs.opensearchServerlessIndexName"
+    ]
+  }
+}

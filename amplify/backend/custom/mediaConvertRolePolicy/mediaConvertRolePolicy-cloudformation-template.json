@@ -1,0 +1,72 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "env": {
+      "Type": "String"
+    },
+    "functionCalculateVectorEmbeddingForImagesInS3IndexInOpensearchName": {
+      "Type": "String",
+      "Description": "Input parameter describing Name attribute for function/CalculateVectorEmbeddingForImagesInS3IndexInOpensearch resource"
+    },
+    "functionCalculateVectorEmbeddingForImagesInS3IndexInOpensearchArn": {
+      "Type": "String",
+      "Description": "Input parameter describing Arn attribute for function/CalculateVectorEmbeddingForImagesInS3IndexInOpensearch resource"
+    },
+    "functionCalculateVectorEmbeddingForImagesInS3IndexInOpensearchRegion": {
+      "Type": "String",
+      "Description": "Input parameter describing Region attribute for function/CalculateVectorEmbeddingForImagesInS3IndexInOpensearch resource"
+    },
+    "functionCalculateVectorEmbeddingForImagesInS3IndexInOpensearchLambdaExecutionRole": {
+      "Type": "String",
+      "Description": "Input parameter describing LambdaExecutionRole attribute for function/CalculateVectorEmbeddingForImagesInS3IndexInOpensearch resource"
+    },
+    "functionCalculateVectorEmbeddingForImagesInS3IndexInOpensearchLambdaExecutionRoleArn": {
+      "Type": "String",
+      "Description": "Input parameter describing LambdaExecutionRoleArn attribute for function/CalculateVectorEmbeddingForImagesInS3IndexInOpensearch resource"
+    },
+    "functionCalculateVectorEmbeddingForImagesInS3IndexInOpensearchMediaConvertExecutionRole": {
+      "Type": "String",
+      "Description": "Input parameter describing LambdaExecutionRole attribute for function/CalculateVectorEmbeddingForImagesInS3IndexInOpensearch resource"
+    },
+    "storages3storageBucketName": {
+      "Type": "String",
+      "Description": "Input parameter describing BucketName attribute for storage/s3storage resource"
+    },
+    "storages3storageRegion": {
+      "Type": "String",
+      "Description": "Input parameter describing Region attribute for storage/s3storage resource"
+    }
+  },
+  "Resources": {
+    "MediaConvertExecutionRoleExecutionPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "clip-crunchers-media-convert-execution-policy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": [
+                "s3:Get*",
+                "s3:List*",
+                "s3:Put*"
+              ],
+              "Resource": [
+                {
+                  "Fn::Sub": "arn:${AWS::Partition}:s3:::${storages3storageBucketName}/*"
+                }
+              ],
+              "Effect": "Allow"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "functionCalculateVectorEmbeddingForImagesInS3IndexInOpensearchMediaConvertExecutionRole"
+          }
+        ]
+      }
+    }
+  },
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.10.3\",\"stackType\":\"custom-customCloudformation\",\"metadata\":{}}"
+}
