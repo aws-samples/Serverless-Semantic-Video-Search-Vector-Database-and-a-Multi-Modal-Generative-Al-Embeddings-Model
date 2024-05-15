@@ -1,0 +1,21 @@
+[
+  {
+    "Action": ["bedrock:InvokeModel"],
+    "Resource": [{ "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockModelId}" }]
+  },
+  {
+    "Action": ["aoss:APIAccessAll"],
+    "Resource": [{ "Ref": "vectordbopensearchopensearchServerlessCollectionARN" }]
+  },
+  {
+    "Action": ["MediaConvert:CreateJob"],
+    "Resource": [
+      { "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:queues/*" },
+      { "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:jobTemplates/${mediaConvertJobTemplateName}" }
+    ]
+  },
+  {
+    "Action": ["iam:PassRole"],
+    "Resource": [{ "Fn::GetAtt": ["MediaConvertExecutionRole", "Arn"] }]
+  }
+]

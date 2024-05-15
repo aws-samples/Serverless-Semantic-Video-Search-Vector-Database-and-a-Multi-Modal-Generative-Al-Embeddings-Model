@@ -1,0 +1,55 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-clipcrunchers-dev-321d2-authRole",
+      "UnauthRoleArn": "arn:aws:iam::749165261179:role/amplify-clipcrunchers-dev-321d2-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::749165261179:role/amplify-clipcrunchers-dev-321d2-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-clipcrunchers-dev-321d2-deployment",
+      "UnauthRoleName": "amplify-clipcrunchers-dev-321d2-unauthRole",
+      "StackName": "amplify-clipcrunchers-dev-321d2",
+      "StackId": "arn:aws:cloudformation:us-east-1:749165261179:stack/amplify-clipcrunchers-dev-321d2/e2eb12c0-f2d0-11ee-b391-0eca505be417",
+      "AmplifyAppId": "d37wublfupexpi",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-clipcrunchers-dev-321d2-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "frontend1790dc25": {}
+      },
+      "function": {
+        "CalculateVectorEmbeddingForImagesInS3IndexInOpensearch": {
+          "deploymentBucketName": "amplify-clipcrunchers-dev-321d2-deployment",
+          "s3Key": "amplify-builds/CalculateVectorEmbeddingForImagesInS3IndexInOpensearch-326d2b79365a597a5644-build.zip"
+        },
+        "frontendClipCrunchersShared": {
+          "deploymentBucketName": "amplify-clipcrunchers-dev-321d2-deployment",
+          "s3Key": "amplify-builds/frontendClipCrunchersShared-LambdaLayerVersiona401b2fb-build.zip"
+        },
+        "frontendf6b68d3c": {
+          "deploymentBucketName": "amplify-clipcrunchers-dev-321d2-deployment",
+          "s3Key": "amplify-builds/frontendf6b68d3c-7850622f577469455763-build.zip"
+        },
+        "opensearch": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d37wublfupexpi",
+          "type": "manual"
+        }
+      },
+      "api": {
+        "clipcrunchapi": {}
+      },
+      "custom": {
+        "vectordbaccess": {},
+        "mediaConvertRolePolicy": {}
+      },
+      "storage": {
+        "s3storage": {}
+      },
+      "vectordb": {
+        "opensearch": {}
+      }
+    }
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "api": {
+    "clipcrunchapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "frontendf6b68d3c"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "auth": {
+    "frontend1790dc25": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [],
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "custom": {
+    "mediaConvertRolePolicy": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "Region",
+            "LambdaExecutionRole",
+            "LambdaExecutionRoleArn",
+            "MediaConvertExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "CalculateVectorEmbeddingForImagesInS3IndexInOpensearch"
+        },
+        {
+          "attributes": [
+            "BucketName",
+            "Region"
+          ],
+          "category": "storage",
+          "resourceName": "s3storage"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "customCloudformation"
+    },
+    "vectordbaccess": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "Region",
+            "LambdaExecutionRole",
+            "LambdaExecutionRoleArn"
+          ],
+          "category": "function",
+          "resourceName": "CalculateVectorEmbeddingForImagesInS3IndexInOpensearch"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "Region",
+            "LambdaExecutionRole",
+            "LambdaExecutionRoleArn"
+          ],
+          "category": "function",
+          "resourceName": "frontendf6b68d3c"
+        },
+        {
+          "attributes": [
+            "BucketName",
+            "Region"
+          ],
+          "category": "storage",
+          "resourceName": "s3storage"
+        },
+        {
+          "attributes": [
+            "CollectionEndpoint",
+            "opensearchServerlessCollectionARN",
+            "opensearchServerlessCollectionName",
+            "opensearchServerlessIndexName"
+          ],
+          "category": "vectordb",
+          "resourceName": "opensearch"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "customCloudformation"
+    }
+  },
+  "function": {
+    "CalculateVectorEmbeddingForImagesInS3IndexInOpensearch": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "frontendClipCrunchersShared"
+        },
+        {
+          "attributes": [
+            "CollectionEndpoint",
+            "opensearchServerlessCollectionARN",
+            "opensearchServerlessCollectionName",
+            "opensearchServerlessIndexName"
+          ],
+          "category": "vectordb",
+          "resourceName": "opensearch"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "frontendClipCrunchersShared": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer"
+    },
+    "frontendf6b68d3c": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "frontendClipCrunchersShared"
+        },
+        {
+          "attributes": [
+            "CollectionEndpoint",
+            "opensearchServerlessCollectionARN",
+            "opensearchServerlessCollectionName",
+            "opensearchServerlessIndexName"
+          ],
+          "category": "vectordb",
+          "resourceName": "opensearch"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "hosting": {},
+  "parameters": {
+    "AMPLIFY_function_CalculateVectorEmbeddingForImagesInS3IndexInOpensearch_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CalculateVectorEmbeddingForImagesInS3IndexInOpensearch"
+        }
+      ]
+    },
+    "AMPLIFY_function_CalculateVectorEmbeddingForImagesInS3IndexInOpensearch_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CalculateVectorEmbeddingForImagesInS3IndexInOpensearch"
+        }
+      ]
+    },
+    "AMPLIFY_function_frontendClipCrunchersShared_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "frontendClipCrunchersShared"
+        }
+      ]
+    },
+    "AMPLIFY_function_frontendClipCrunchersShared_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "frontendClipCrunchersShared"
+        }
+      ]
+    },
+    "AMPLIFY_function_frontendf6b68d3c_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "frontendf6b68d3c"
+        }
+      ]
+    },
+    "AMPLIFY_function_frontendf6b68d3c_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "frontendf6b68d3c"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "s3storage": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "LambdaExecutionRole"
+          ],
+          "category": "function",
+          "resourceName": "CalculateVectorEmbeddingForImagesInS3IndexInOpensearch"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
+  },
+  "vectordb": {
+    "opensearch": {
+      "providerPlugin": "awscloudformation"
+    }
+  }
+}

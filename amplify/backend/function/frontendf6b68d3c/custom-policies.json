@@ -1,0 +1,14 @@
+[
+  {
+    "Action": ["bedrock:InvokeModel"],
+    "Resource": [{ "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockModelId}" }]
+  },
+  {
+    "Action": ["aoss:APIAccessAll"],
+    "Resource": [{ "Ref": "vectordbopensearchopensearchServerlessCollectionARN" }]
+  },
+  {
+    "Action": ["kinesisvideo:Describe*", "kinesisvideo:Get*", "kinesisvideo:List*"],
+    "Resource": [{ "Fn::Sub": "arn:${AWS::Partition}:kinesisvideo:${AWS::Region}:${AWS::AccountId}:${customkinesisvideostreamkinesisVideoStreamName}" }]
+  }
+]

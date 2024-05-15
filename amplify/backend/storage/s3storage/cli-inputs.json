@@ -1,0 +1,14 @@
+{
+  "resourceName": "s3storage",
+  "policyUUID": "eeb13a3d",
+  "bucketName": "clipcrunchobjects",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "CalculateVectorEmbeddingForImagesInS3IndexInOpensearch",
+  "groupAccess": {}
+}
