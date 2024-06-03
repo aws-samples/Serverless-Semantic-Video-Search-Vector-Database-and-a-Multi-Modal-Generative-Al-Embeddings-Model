@@ -1,7 +1,7 @@
 # Serverless Semantic Video Search Using a Vector Database and a Multi-Modal Generative AI Embeddings Model
 
 You can find the related blogpost to this repository here: 
-[Publication coming soon!]()
+[Implement serverless semantic search of image and live video with Amazon Titan Multimodal Embeddings!](https://aws.amazon.com/blogs/machine-learning/implement-serverless-semantic-search-of-image-and-live-video-with-amazon-titan-multimodal-embeddings/)
 
 Deploying the infrastructure requires you to have sufficient AWS privileges to do so.
 
