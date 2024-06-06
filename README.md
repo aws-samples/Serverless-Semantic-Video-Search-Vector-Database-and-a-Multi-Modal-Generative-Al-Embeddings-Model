@@ -48,6 +48,7 @@ Deploying the infrastructure requires you to have sufficient AWS privileges to d
     * "aoss:CreateSecurityPolicy"
     * "aoss:DeleteSecurityPolicy"
     * "aoss:DeleteCollection"
+    * "aoss:DeleteAccessPolicy"
     * "aoss:TagResource"
     * "aoss:UntagResource"
     * "kms:Decrypt"
