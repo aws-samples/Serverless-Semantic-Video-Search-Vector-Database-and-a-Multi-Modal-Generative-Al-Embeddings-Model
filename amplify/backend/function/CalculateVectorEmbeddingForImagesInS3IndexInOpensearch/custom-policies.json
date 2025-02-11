@@ -1,7 +1,19 @@
 [
   {
     "Action": ["bedrock:InvokeModel"],
-    "Resource": [{ "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockModelId}" }]
+    "Resource": [                
+    {"Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockEmbeddingModelId}"},
+    {"Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockInferenceModelId}"}
+  ]
+  },
+  {
+    "Action": ["cloudwatch:PutMetricData"],
+    "Resource": ["*"],
+    "Condition": {
+      "StringEquals": {
+        "cloudwatch:namespace": { "Fn::Sub": "${cloudwatchNamespace}" }
+      }
+    }
   },
   {
     "Action": ["aoss:APIAccessAll"],
@@ -13,6 +25,10 @@
       { "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:queues/*" },
       { "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:jobTemplates/${mediaConvertJobTemplateName}" }
     ]
+  },
+  {
+    "Action": ["MediaConvert:GetJob"],
+    "Resource": [{ "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:jobs/*" }]
   },
   {
     "Action": ["iam:PassRole"],

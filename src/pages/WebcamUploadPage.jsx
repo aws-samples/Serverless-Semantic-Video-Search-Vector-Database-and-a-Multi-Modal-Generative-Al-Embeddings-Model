@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState, useEffect } from 'react'
 import { get } from 'aws-amplify/api';
 import Box from "@cloudscape-design/components/box"
 import Container from "@cloudscape-design/components/container"
@@ -9,6 +9,7 @@ import Form from "@cloudscape-design/components/form"
 import Button from "@cloudscape-design/components/button"
 import Spinner from "@cloudscape-design/components/spinner"
 import Toggle from "@cloudscape-design/components/toggle";
+import Select from "@cloudscape-design/components/select";
 import Webcam from "react-webcam";
 import { uploadData } from 'aws-amplify/storage';
 import { Buffer } from "buffer"
@@ -26,6 +27,24 @@ function WebcamUploadPage() {
     const [isUploading, setIsUploading] = useState(false)
     const [capturing, setCapturing] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState([]);
+    const [devices, setDevices] = useState([]);
+    const [selectedDevice, setSelectedDevice] = useState(null);
+
+    const handleDevices = useCallback(
+        (mediaDevices) =>
+            setDevices(mediaDevices.filter(({ kind }) => kind === "videoinput")),
+        [setDevices]
+    );
+
+    useEffect(() => {
+        navigator.mediaDevices.enumerateDevices().then(handleDevices);
+    }, [handleDevices]);
+
+    useEffect(() => {
+        if (devices.length > 0 && !selectedDevice) {
+            setSelectedDevice(devices[0]);
+        }
+    }, [devices, selectedDevice]);
 
     // create a capture function
     const captureImage = useCallback(() => {
@@ -129,34 +148,54 @@ function WebcamUploadPage() {
         setRecordedChunks([])
     };
 
+    const handleDeviceChange = (event) => {
+        setSelectedDevice(event.detail.selectedOption);
+    };
+
     return (
         <Box margin={{ bottom: "l", top: "s" }} padding="xxs">
             <Form header={<Header variant="h1">Webcam Upload</Header>}>
-
                 <Container>
                     <SpaceBetween size='m'>
-                        {
-                            alertVisible ?
-                                <SpaceBetween size='m'>
-                                    <Alert
-                                        type={alertType}
-                                        header={alertText} onDismiss={() => { setAlertVisible(false) }}
-                                    /></SpaceBetween> : <></>
-                        }
+                        {alertVisible && (
+                            <SpaceBetween size='m'>
+                                <Alert
+                                    type={alertType}
+                                    header={alertText}
+                                    onDismiss={() => { setAlertVisible(false) }}
+                                />
+                            </SpaceBetween>
+                        )}
 
                         <Toggle
-                            onChange={({ detail }) =>
-                                setMirrored(detail.checked)
-                            }
+                            onChange={({ detail }) => setMirrored(detail.checked)}
                             checked={mirrored}
                         >
                             Mirrored
                         </Toggle>
 
+                        <Select
+                            selectedOption={selectedDevice}
+                            onChange={handleDeviceChange}
+                            options={devices.map((device, index) => ({
+                                label: device.label || `Camera ${index + 1}`,
+                                value: device.deviceId
+                            }))}
+                            placeholder="Select a camera"
+                            disabled={isUploading || capturing || imgSrc !== null}
+                        />
+
                         {imgSrc ? (
                             <img src={imgSrc} alt="webcam" />
                         ) : (
-                            <Webcam height={600} width={600} ref={webcamRef} mirrored={mirrored} screenshotFormat="image/jpeg" />
+                            <Webcam
+                                height={600}
+                                width={600}
+                                ref={webcamRef}
+                                mirrored={mirrored}
+                                screenshotFormat="image/jpeg"
+                                videoConstraints={selectedDevice ? { deviceId: selectedDevice.value } : undefined}
+                            />
                         )}
 
                         {recordedChunks.length === 0 && !capturing && (imgSrc ? (
@@ -194,7 +233,7 @@ function WebcamUploadPage() {
                                 {isUploading ? <Spinner /> : "Upload Video"}
                             </Button>
                         }
-                        
+
                         {imgSrc &&
                             <Button disabled={isUploading}
                                     onClick={uploadPhoto}>{isUploading ? <Spinner /> : "Upload Image"}

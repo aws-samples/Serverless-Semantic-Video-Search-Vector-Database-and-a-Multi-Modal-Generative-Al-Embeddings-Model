@@ -69,6 +69,7 @@ function App() {
       <AppLayout
         navigation={<SideBar title={"Clip Crunch"} items={[
           { type: "link", text: "Search", href: "/" },
+          { type: "link", text: "Summarize", href: "/summarize" },
           ... __KINESIS_VIDEO_STREAM_INTEGRATION__ ? [{ type: "link", text: "Live", href: "/live" }] : [],
           { type: "link", text: "Webcam Upload", href: "/webcamupload" },
           { type: "link", text: "File Upload", href: "/fileupload" }

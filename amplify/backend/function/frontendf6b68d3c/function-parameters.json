@@ -7,5 +7,12 @@
       "isLatestVersionSelected": true,
       "env": "dev"
     }
-  ]
+  ],
+  "permissions": {
+    "storage": {
+      "s3storage": [
+        "read"
+      ]
+    }
+  }
 }

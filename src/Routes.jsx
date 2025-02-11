@@ -3,7 +3,8 @@ import {
     RouterProvider,
 } from "react-router-dom";
 
-import SearchPage from "./pages/SearchPage"
+import SearchPage from "./pages/SearchPage";
+import SummarizePage from "./pages/SummarizePage";
 import LivePage from './pages/LivePage';
 import WebcamUploadPage from './pages/WebcamUploadPage.jsx';
 import FileUploadPage from './pages/FileUploadPage.jsx';
@@ -25,6 +26,10 @@ function Routes() {
         {
             path: "/fileupload",
             element: <FileUploadPage />,
+        },
+        {
+            path: "/summarize",
+            element: <SummarizePage />,
         }
     ]);
 

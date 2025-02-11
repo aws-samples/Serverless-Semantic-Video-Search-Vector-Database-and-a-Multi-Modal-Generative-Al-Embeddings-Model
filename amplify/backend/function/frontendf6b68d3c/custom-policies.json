@@ -1,7 +1,9 @@
 [
   {
     "Action": ["bedrock:InvokeModel"],
-    "Resource": [{ "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockModelId}" }]
+    "Resource": [    
+    {"Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockEmbeddingModelId}"},
+    {"Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockInferenceModelId}"}]
   },
   {
     "Action": ["aoss:APIAccessAll"],

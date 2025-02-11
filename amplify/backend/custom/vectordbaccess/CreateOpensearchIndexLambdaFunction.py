@@ -194,6 +194,15 @@ def create_opensearch_index():
                 's3-uri': {
                     'type': 'text'
                 },
+                'summary': {
+                    'type': 'text'
+                },
+                'source': {
+                    'type': 'text'
+                },
+                'custom-metadata': {
+                    'type': 'text'
+                },
                 'timestamp': {
                     'type': 'date'
                 }
