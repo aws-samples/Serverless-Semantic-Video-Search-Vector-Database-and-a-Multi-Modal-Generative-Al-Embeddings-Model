@@ -148,6 +148,13 @@
       "dependsOn": [
         {
           "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "s3storage"
+        },
+        {
+          "attributes": [
             "Arn"
           ],
           "category": "function",

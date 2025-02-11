@@ -68,5 +68,5 @@
       }
     }
   },
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.10.3\",\"stackType\":\"custom-customCloudformation\",\"metadata\":{}}"
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.12.4\",\"stackType\":\"custom-customCloudformation\",\"metadata\":{}}"
 }

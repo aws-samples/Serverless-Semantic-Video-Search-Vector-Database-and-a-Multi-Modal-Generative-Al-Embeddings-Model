@@ -10,26 +10,26 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@aws-amplify/ui-react": "^6.0.5",
-    "@cloudscape-design/components": "^3.0.457",
-    "@cloudscape-design/global-styles": "^1.0.17",
-    "aws-amplify": "^6.0.6",
+    "@aws-amplify/ui-react": "^6.5.5",
+    "@cloudscape-design/components": "^3.0.822",
+    "@cloudscape-design/global-styles": "^1.0.32",
+    "aws-amplify": "^6.8.0",
     "buffer": "^6.0.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-hls-player": "^3.0.7",
-    "react-router-dom": "^6.21.0",
+    "react-router-dom": "^6.27.0",
     "react-webcam": "^7.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
-    "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.55.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
-    "vite": "^5.4.6"
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^9.14.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "vite": "^5.4.10"
   },
   "overrides": {
     "react-hls-player": {

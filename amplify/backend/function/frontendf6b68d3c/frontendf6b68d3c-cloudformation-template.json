@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.10.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.12.4\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -40,9 +40,13 @@
       "Type": "String",
       "Default": "clip-crunchers-video-stream"
     },
-    "bedrockModelId": {
+    "bedrockEmbeddingModelId": {
       "Type": "String",
       "Default": "amazon.titan-embed-image-v1"
+    },
+    "bedrockInferenceModelId": {
+      "Type": "String",
+      "Default": "anthropic.claude-3-sonnet-20240229-v1:0"
     },
     "kinesisVideoStreamIntegration": {
       "Type": "String",
@@ -51,6 +55,10 @@
         "True",
         "False"
       ]
+    },
+    "storages3storageBucketName": {
+      "Type": "String",
+      "Default": "storages3storageBucketName"
     }
   },
   "Conditions": {
@@ -115,11 +123,17 @@
             "KinesisVideoStreamName": {
               "Ref": "customkinesisvideostreamkinesisVideoStreamName"
             },
-            "BedrockModelId": {
-              "Ref": "bedrockModelId"
+            "BedrockEmbeddingModelId": {
+              "Ref": "bedrockEmbeddingModelId"
+            },
+            "BedrockInferenceModelId": {
+              "Ref": "bedrockInferenceModelId"
             },
             "KinesisVideoStreamIntegration": {
               "Ref": "kinesisVideoStreamIntegration"
+            },
+            "STORAGE_S3STORAGE_BUCKETNAME": {
+              "Ref": "storages3storageBucketName"
             }
           }
         },
@@ -234,7 +248,10 @@
               ],
               "Resource": [
                 {
-                  "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockModelId}"
+                  "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockEmbeddingModelId}"
+                },
+                {
+                  "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockInferenceModelId}"
                 }
               ],
               "Effect": "Allow"
@@ -272,6 +289,62 @@
         ]
       },
       "DependsOn": "LambdaExecutionRole"
+    },
+    "AmplifyResourcesPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "storages3storageBucketName"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "storages3storageBucketName"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
     }
   },
   "Outputs": {

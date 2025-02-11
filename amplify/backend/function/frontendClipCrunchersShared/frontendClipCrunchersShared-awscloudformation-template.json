@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.10.3\",\"stackType\":\"function-LambdaLayer\",\"metadata\":{}}",
+  "Description": "Lambda layer resource stack creation using Amplify CLI",
   "Parameters": {
     "env": {
       "Type": "String"
@@ -20,23 +20,19 @@
     }
   },
   "Resources": {
-    "LambdaLayerVersiona401b2fb": {
+    "LambdaLayerVersiond4a62d61": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
-        "CompatibleRuntimes": {
-          "Ref": "runtimes"
-        },
+        "CompatibleRuntimes": [
+          "python3.11"
+        ],
         "Content": {
           "S3Bucket": {
             "Ref": "deploymentBucketName"
           },
-          "S3Key": {
-            "Ref": "s3Key"
-          }
+          "S3Key": "amplify-builds/frontendClipCrunchersShared-LambdaLayerVersiond4a62d61-build.zip"
         },
-        "Description": {
-          "Ref": "description"
-        },
+        "Description": "Updated layer version 2024-07-22T22:50:55.543Z",
         "LayerName": {
           "Fn::Sub": [
             "frontendClipCrunchersShared-${env}",
@@ -51,13 +47,11 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Retain"
     },
-    "LambdaLayerPermissionPrivatea401b2fb": {
+    "LambdaLayerPermissionPrivated4a62d61": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
-        "LayerVersionArn": {
-          "Ref": "LambdaLayerVersiona401b2fb"
-        },
+        "LayerVersionArn": "arn:aws:lambda:us-east-1:749165261179:layer:frontendClipCrunchersShared-dev:5",
         "Principal": {
           "Ref": "AWS::AccountId"
         }
@@ -67,7 +61,7 @@
   "Outputs": {
     "Arn": {
       "Value": {
-        "Ref": "LambdaLayerVersiona401b2fb"
+        "Ref": "LambdaLayerVersiond4a62d61"
       }
     }
   }

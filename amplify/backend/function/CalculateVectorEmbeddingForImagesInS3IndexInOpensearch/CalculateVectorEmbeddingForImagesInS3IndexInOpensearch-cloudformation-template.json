@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.10.3\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.12.4\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -36,13 +36,21 @@
       "Type": "String",
       "Description": "Input parameter describing opensearchServerlessIndexName attribute for vectordb/opensearch resource"
     },
-    "bedrockModelId": {
+    "bedrockEmbeddingModelId": {
       "Type": "String",
       "Default": "amazon.titan-embed-image-v1"
+    },
+    "bedrockInferenceModelId": {
+      "Type": "String",
+      "Default": "anthropic.claude-3-sonnet-20240229-v1:0"
     },
     "mediaConvertJobTemplateName": {
       "Type": "String",
       "Default": "ClipCrunchersVideoToFramesJobTemplate"
+    },
+    "cloudwatchNamespace": {
+      "Type": "String",
+      "Default": "clip-crunchers"
     }
   },
   "Conditions": {
@@ -104,8 +112,11 @@
             "OpensearchIndexName": {
               "Ref": "vectordbopensearchopensearchServerlessIndexName"
             },
-            "BedrockModelId": {
-              "Ref": "bedrockModelId"
+            "BedrockEmbeddingModelId": {
+              "Ref": "bedrockEmbeddingModelId"
+            },
+            "BedrockInferenceModelId": {
+              "Ref": "bedrockInferenceModelId"
             },
             "MediaConvertExecutionRoleArn": {
               "Fn::GetAtt": [
@@ -115,6 +126,9 @@
             },
             "MediaConvertJobTemplateName": {
               "Ref": "mediaConvertJobTemplateName"
+            },
+            "CLOUDWATCH_NAMESPACE": {
+              "Ref": "cloudwatchNamespace"
             }
           }
         },
@@ -229,9 +243,28 @@
               ],
               "Resource": [
                 {
-                  "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockModelId}"
+                  "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockEmbeddingModelId}"
+                },
+                {
+                  "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${bedrockInferenceModelId}"
                 }
               ],
+              "Effect": "Allow"
+            },
+            {
+              "Action": [
+                "cloudwatch:PutMetricData"
+              ],
+              "Resource": [
+                "*"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "cloudwatch:namespace": {
+                    "Fn::Sub": "${cloudwatchNamespace}"
+                  }
+                }
+              },
               "Effect": "Allow"
             },
             {
@@ -255,6 +288,17 @@
                 },
                 {
                   "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:jobTemplates/${mediaConvertJobTemplateName}"
+                }
+              ],
+              "Effect": "Allow"
+            },
+            {
+              "Action": [
+                "MediaConvert:GetJob"
+              ],
+              "Resource": [
+                {
+                  "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:jobs/*"
                 }
               ],
               "Effect": "Allow"
