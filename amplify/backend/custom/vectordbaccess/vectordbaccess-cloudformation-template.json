@@ -412,7 +412,7 @@
         "Handler": "index.handler",
         "FunctionName": {
           "Fn::Sub": [
-            "custom-resource-to-create-${index_name}-index",
+            "cr-to-create-${index_name}-index-in-${env}",
             {
               "collection_name": {
                 "Ref": "vectordbopensearchopensearchServerlessCollectionName"
