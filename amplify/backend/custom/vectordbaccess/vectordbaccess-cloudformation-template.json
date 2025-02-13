@@ -68,7 +68,7 @@
       "Type": "String",
       "Description": "Input parameter describing Region attribute for storage/s3storage resource"
     },
-    "mediaConvertJobTemplateName": {
+    "mediaConvertJobTemplatePrefix": {
       "Type": "String",
       "Default": "ClipCrunchersVideoToFramesJobTemplate"
     },
@@ -450,7 +450,16 @@
               "Ref": "mediaConvertFrameRateNumerator"
             },
             "MediaConvertJobTemplateName": {
-              "Ref": "mediaConvertJobTemplateName"
+              "Fn::Sub": ["${templatePrefix}-${env}",
+                {
+                  "templatePrefix": {
+                    "Ref": "mediaConvertJobTemplatePrefix"
+                  },
+                  "env": {
+                    "Ref": "env"
+                  }
+                }
+              ]
             }
           }
         },

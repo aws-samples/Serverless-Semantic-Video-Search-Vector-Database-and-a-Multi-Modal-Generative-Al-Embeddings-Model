@@ -23,7 +23,7 @@
     "Action": ["MediaConvert:CreateJob"],
     "Resource": [
       { "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:queues/*" },
-      { "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:jobTemplates/${mediaConvertJobTemplateName}" }
+      { "Fn::Sub": "arn:${AWS::Partition}:mediaconvert:${AWS::Region}:${AWS::AccountId}:jobTemplates/${mediaConvertJobTemplatePrefix}-${env}" }
     ]
   },
   {

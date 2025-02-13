@@ -44,7 +44,7 @@
       "Type": "String",
       "Default": "anthropic.claude-3-sonnet-20240229-v1:0"
     },
-    "mediaConvertJobTemplateName": {
+    "mediaConvertJobTemplatePrefix": {
       "Type": "String",
       "Default": "ClipCrunchersVideoToFramesJobTemplate"
     },
@@ -125,7 +125,16 @@
               ]
             },
             "MediaConvertJobTemplateName": {
-              "Ref": "mediaConvertJobTemplateName"
+              "Fn::Sub": ["${templatePrefix}-${env}",
+                {
+                  "templatePrefix": {
+                    "Ref": "mediaConvertJobTemplatePrefix"
+                  },
+                  "env": {
+                    "Ref": "env"
+                  }
+                }
+              ]
             },
             "CLOUDWATCH_NAMESPACE": {
               "Ref": "cloudwatchNamespace"
