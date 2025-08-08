@@ -88,7 +88,7 @@ Deploying the infrastructure requires you to have sufficient AWS privileges to d
 * Add a [SPA Redirect](#spa-redirect)
  
 ### SPA Redirect
-Follow the [instructions](https://docs.aws.amazon.com/amplify/latest/userguide/redirects.html#parts-of-a-redirect) to create a redirect for [single page web apps (SPA)](https://docs.aws.amazon.com/amplify/latest/userguide/redirects.html#redirects-for-single-page-web-apps-spa)
+Follow the [instructions](https://docs.aws.amazon.com/amplify/latest/userguide/creating-editing-redirects.html) to create a redirect for [single page web apps (SPA)](https://docs.aws.amazon.com/amplify/latest/userguide/redirect-rewrite-examples.html#redirects-for-single-page-web-apps-spa)
 
 ## Clean up resources
 
