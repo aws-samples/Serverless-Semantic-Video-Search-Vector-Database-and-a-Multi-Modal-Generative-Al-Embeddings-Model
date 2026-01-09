@@ -18,7 +18,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hls-player": "^3.0.7",
-    "react-router-dom": "^6.27.0",
+    "react-router-dom": "^6.30.3",
     "react-webcam": "^7.2.0"
   },
   "devDependencies": {
